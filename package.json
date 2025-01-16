@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+  },
+  "dependencies": {
+    "truffle-assertions": "^0.9.2"
+  }
+}
