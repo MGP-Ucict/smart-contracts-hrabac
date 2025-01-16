@@ -1,7 +1,6 @@
 {
-  "devDependencies": {
-  },
   "dependencies": {
+    "chai": "^4.5.0",
     "truffle-assertions": "^0.9.2"
   }
 }

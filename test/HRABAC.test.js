@@ -20,12 +20,13 @@ contract('HRABAC', (accounts) => {
         };
 
   beforeEach(async () => {
-    instance = await HRABAC.deployed()
+    instance = await HRABAC.deployed();
+    instanceAdress = await instance.getSender.call();
   });
 
   it("Test HRABAC - test doctor create and access own created health record", async () => {
 
-        const roleDoctor = await instance.assignRole.sendTransaction(doctorAddress,"Doctor", true);
+        const roleDoctor = await instance.assignRole.sendTransaction(doctorAddress,"Doctor", true, {from: instanceAdress});
         const checkDoctor = await instance.checkIsActiveDoctor.call(doctorAddress);
         expect(checkDoctor, "The role is not active Doctor").to.true;
       
@@ -40,7 +41,7 @@ contract('HRABAC', (accounts) => {
 
 it("Test HRABAC - test doctor DO NOT access NOT own created health record", async () => {
 
-        const roleOtherDoctor = await instance.assignRole.sendTransaction(otherDoctorAddress,"Doctor", true);
+        const roleOtherDoctor = await instance.assignRole.sendTransaction(otherDoctorAddress,"Doctor", true, {from: instanceAdress});
         const checkOtherDoctor = await instance.checkIsActiveDoctor.call(otherDoctorAddress);
         expect(checkOtherDoctor, "The role is not active Doctor").to.true;
       
@@ -50,7 +51,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
 
   it('Test HRABAC - test patient access own health record', async () => {
 
-        const rolePatient = await instance.assignRole.sendTransaction(patientAddress,"Patient", true);
+        const rolePatient = await instance.assignRole.sendTransaction(patientAddress,"Patient", true,  {from: instanceAdress});
         const checkPatient = await instance.checkIsActivePatient.call(patientAddress);
         expect(checkPatient, "The role is not active patient").to.true;
         const canPatient = await instance.canAccess.call(newHealthRecord.ID, {from: patientAddress});
@@ -59,7 +60,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
 
   it('Test HRABAC - test patient DO NOT access NOT own health record', async () => {
 
-        const roleOtherPatient = await instance.assignRole.sendTransaction(otherPatientAddress,"Patient", true);
+        const roleOtherPatient = await instance.assignRole.sendTransaction(otherPatientAddress,"Patient", true,  {from: instanceAdress});
         const checkOtherPatient = await instance.checkIsActivePatient.call(otherPatientAddress);
         expect(checkOtherPatient, "The role is not active patient").to.true;
         const canOtherPatient = await instance.canAccess.call(newHealthRecord.ID, {from: otherPatientAddress});
@@ -68,7 +69,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
 
   it('Test HRABAC - test inactive patient DO NOT access NOT own health record', async () => {
 
-        const rolePatient = await instance.assignRole.sendTransaction(patientAddress,"Patient", false);
+        const rolePatient = await instance.assignRole.sendTransaction(patientAddress,"Patient", false,  {from: instanceAdress});
         const checkPatient = await instance.checkIsActivePatient.call(patientAddress);
         expect(checkPatient, "The role is not active patient").to.false;
         const canPatient = await instance.canAccess.call(newHealthRecord.ID, {from: patientAddress});
@@ -77,7 +78,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
 
   it('Test HRABAC - test admin access health record', async () => {
 
-        const roleAdmin = await instance.assignRole.sendTransaction(adminAddress,"Admin", true);
+        const roleAdmin = await instance.assignRole.sendTransaction(adminAddress,"Admin", true,  {from: instanceAdress});
         const checkAdmin = await instance.checkIsActiveAdmin.call(adminAddress);
         expect(checkAdmin, "The role is not active admin").to.true;
         const canAdmin = await instance.canAccess.call(newHealthRecord.ID, {from: adminAddress});
@@ -86,7 +87,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
 
    it('Test HRABAC - test inactive admin DO NOT access health record', async () => {
 
-        const roleAdmin = await instance.assignRole.sendTransaction(adminAddress,"Admin", false);
+        const roleAdmin = await instance.assignRole.sendTransaction(adminAddress,"Admin", false,  {from: instanceAdress});
         const checkAdmin = await instance.checkIsActiveAdmin.call(adminAddress);
         expect(checkAdmin, "The role is not active admin").to.false;
         const canAdmin = await instance.canAccess.call(newHealthRecord.ID, {from: adminAddress});
