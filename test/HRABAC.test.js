@@ -12,6 +12,8 @@ contract('HRABAC', (accounts) => {
   let adminAddress = accounts[2];
   let otherPatientAddress = accounts[3];
   let otherDoctorAddress = accounts[4];
+  let instanceAddress;
+   let doctor1Address = accounts[6];
 
   const newHealthRecord = {
           ID: 1,
@@ -29,7 +31,7 @@ contract('HRABAC', (accounts) => {
         const roleDoctor = await instance.assignRole.sendTransaction(doctorAddress,"Doctor", true, {from: instanceAddress});
         const checkDoctor = await instance.checkIsActiveDoctor.call(doctorAddress);
         expect(checkDoctor, "The role is not active Doctor").to.true;
-      
+        
         const healthRecord = await instance.initHealthRecord.sendTransaction(newHealthRecord.patient,
           newHealthRecord.data,
           newHealthRecord.ID, 

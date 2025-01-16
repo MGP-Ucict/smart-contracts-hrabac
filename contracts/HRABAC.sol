@@ -15,8 +15,6 @@ contract HRABAC {
 	bytes32 public constant DOCTOR = keccak256("Doctor");
 	bytes32 public constant ADMIN = keccak256("Admin");
 
-	bytes32 public constant SUPERADMIN = keccak256("Super Admin");
-
 	address owner;
 
 	constructor()
@@ -28,8 +26,12 @@ contract HRABAC {
 	{  
 	    return msg.sender;  
 	}
+	function getOwner() public view returns (address)  
+	{  
+	    return owner;  
+	}
 
-	function assignRole(address _user, string memory _name, bool _isRoleActive) onlySuperAdmin external returns (Role memory) {
+	function assignRole(address _user, string memory _name, bool _isRoleActive) onlyOwner external returns (Role memory) {
 
 		roles[_user] = Role({name: keccak256(abi.encodePacked(_name)), isActive: _isRoleActive});
 		return roles[_user];
@@ -40,7 +42,7 @@ contract HRABAC {
 		return roles[_user];
 	}
 
-	function setAddressIsActive(address _user, bool _isActive) onlySuperAdmin external {
+	function setAddressIsActive(address _user, bool _isActive) onlyOwner external {
 
 		isActive[_user] = _isActive;
 	}
@@ -60,8 +62,8 @@ contract HRABAC {
 		return DOCTOR == roles[_user].name && roles[_user].isActive;
 	}
 
-	modifier onlySuperAdmin {
-       require(msg.sender == owner, "The user is not active SuperAdmin!");
+	modifier onlyOwner {
+       require(msg.sender == owner, "The user is not owner!");
        _;
    }
 }
