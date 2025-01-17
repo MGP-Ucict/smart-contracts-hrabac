@@ -31,9 +31,10 @@ contract HRABAC {
 	    return owner;  
 	}
 
-	function assignRole(address _user, string memory _name, bool _isRoleActive) onlyOwner external returns (Role memory) {
+	function assignRole(address _user, string memory _name, bool _isRoleActive, bool _isUserActive) onlyOwner external returns (Role memory) {
 
 		roles[_user] = Role({name: keccak256(abi.encodePacked(_name)), isActive: _isRoleActive});
+		isActive[_user] = _isUserActive;
 		return roles[_user];
 	}
 
@@ -42,24 +43,24 @@ contract HRABAC {
 		return roles[_user];
 	}
 
-	function setAddressIsActive(address _user, bool _isActive) onlyOwner external {
+	function setAddressIsActive(address _user, bool _isUserActive) onlyOwner external {
 
-		isActive[_user] = _isActive;
+		isActive[_user] = _isUserActive;
 	}
 
 	function checkIsActivePatient(address _user) external view returns (bool) {
 
-		return PATIENT == roles[_user].name && roles[_user].isActive;
+		return PATIENT == roles[_user].name && roles[_user].isActive && isActive[_user];
 	}
 
 	function checkIsActiveAdmin(address _user) external view returns (bool) {
 
-		return ADMIN == roles[_user].name && roles[_user].isActive;
+		return ADMIN == roles[_user].name && roles[_user].isActive && isActive[_user];
 	}
 
 	function checkIsActiveDoctor(address _user) external view returns (bool) {
 
-		return DOCTOR == roles[_user].name && roles[_user].isActive;
+		return DOCTOR == roles[_user].name && roles[_user].isActive && isActive[_user];
 	}
 
 	modifier onlyOwner {
