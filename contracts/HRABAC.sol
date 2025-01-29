@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
 contract HRABAC {
@@ -26,6 +26,7 @@ contract HRABAC {
 	{  
 	    return msg.sender;  
 	}
+	
 	function getOwner() public view returns (address)  
 	{  
 	    return owner;  
@@ -48,19 +49,9 @@ contract HRABAC {
 		isActive[_user] = _isUserActive;
 	}
 
-	function checkIsActivePatient(address _user) external view returns (bool) {
+	function checkIsActive(address _user) external view returns (bool) {
 
-		return PATIENT == roles[_user].name && roles[_user].isActive && isActive[_user];
-	}
-
-	function checkIsActiveAdmin(address _user) external view returns (bool) {
-
-		return ADMIN == roles[_user].name && roles[_user].isActive && isActive[_user];
-	}
-
-	function checkIsActiveDoctor(address _user) external view returns (bool) {
-
-		return DOCTOR == roles[_user].name && roles[_user].isActive && isActive[_user];
+		return roles[_user].isActive && isActive[_user];
 	}
 
 	modifier onlyOwner {
