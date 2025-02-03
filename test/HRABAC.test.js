@@ -69,7 +69,7 @@ it("Test HRABAC - test doctor DO NOT access NOT own created health record", asyn
         expect(canOtherPatient).to.be.false;
     });
 
-  it('Test HRABAC - test inactive patient DO NOT access NOT own health record', async () => {
+  it('Test HRABAC - test inactive patient DO NOT access own health record', async () => {
 
         const rolePatient = await instance.assignRole.sendTransaction(patientAddress,"Patient", false, true, {from: instanceAddress});
         const checkPatient = await instance.checkIsActive.call(patientAddress);
