@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 import {Record} from "./Record.sol";
 import {HRABAC} from "./HRABAC.sol";
 
+error OnlyDoctor();
 
 contract AccessControl is HRABAC, Record {
 
@@ -25,13 +26,12 @@ contract AccessControl is HRABAC, Record {
 
 
 	modifier onlyDoctor {
-       require(DOCTOR == roles[msg.sender].name, "The user is not active doctor!");
+      	require(DOCTOR == roles[msg.sender].name, "The user is not active doctor!");
        _;
    }
 
-	function createHealthRecord(address _patientAddress,  string memory _data,  uint256 _ID) onlyDoctor external returns 		(uint256) {
+	function createHealthRecord(address _patientAddress,  string memory _medicalData,  uint256 _id) external  onlyDoctor {
 
-	    healthRecords[_ID] = HealthRecord({patient: _patientAddress, doctor: msg.sender, data: _data, ID:_ID});
-	    return _ID;
+	    healthRecords[_id] = HealthRecord({patient: _patientAddress, doctor: msg.sender, data: _medicalData, id:_id});
 	}
 }
