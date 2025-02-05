@@ -4,8 +4,6 @@ pragma solidity ^0.8.13;
 import {Record} from "./Record.sol";
 import {HRABAC} from "./HRABAC.sol";
 
-error OnlyDoctor();
-
 contract AccessControl is HRABAC, Record {
 
 	function patientPolicy(address _user, uint256 healthRecordID) public view returns (bool) {
