@@ -56,7 +56,8 @@ contract HRABAC {
 	}
 
 	modifier onlyOwner {
-		    require(msg.sender == owner, "The user is not owner!");
-		     _;
-	    }
+	
+		require(msg.sender == owner, "The user is not owner!");
+		_;
+	}
 }
