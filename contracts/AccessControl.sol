@@ -24,12 +24,14 @@ contract AccessControl is HRABAC, Record {
 
 
 	modifier onlyDoctor {
-      	require(DOCTOR == roles[msg.sender].name, "The user is not active doctor!");
-       _;
-   }
+      		require(DOCTOR == roles[msg.sender].name, "The user is not active doctor!");
+       		_;
+   		}
 
-	function createHealthRecord(address _patientAddress,  string memory _medicalData,  uint256 _id) external  onlyDoctor {
+	function createHealthRecord(address _patientAddress,  string memory _medicalData,  uint256 _id) 
+	external  onlyDoctor {
 
-	    healthRecords[_id] = HealthRecord({patient: _patientAddress, doctor: msg.sender, data: _medicalData, id:_id});
+	    healthRecords[_id] = HealthRecord({patient: _patientAddress, doctor: msg.sender, 
+	    data: _medicalData, id:_id});
 	}
 }
