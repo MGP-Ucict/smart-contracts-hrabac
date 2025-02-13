@@ -24,7 +24,7 @@ contract AccessControl is HRABAC, Record {
 
 
 	modifier onlyDoctor {
-      		require(DOCTOR == roles[msg.sender].name, "The user is not active doctor!");
+      		require(DOCTOR == roles[msg.sender].name, "The user is not doctor!");
        		_;
    	}
 
