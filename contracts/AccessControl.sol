@@ -6,20 +6,16 @@ import {HRABAC} from "./HRABAC.sol";
 
 contract AccessControl is HRABAC, Record {
 
-	function patientPolicy(address _user, uint256 healthRecordID) public view returns (bool) {
+	function policyOwn(address _subjectAttributeValue, address _objectAttributeValue) public pure returns (bool) {
 
-		return PATIENT == roles[_user].name && healthRecords[healthRecordID].patient == _user;
-	}
-
-
-	function doctorPolicy(address _user, uint256 healthRecordID) public view returns (bool) {
-
-		return DOCTOR == roles[_user].name && healthRecords[healthRecordID].doctor == _user;
+		return _subjectAttributeValue == _objectAttributeValue;
 	}
 
 	function canAccess(uint256 healthRecordID) public view returns (bool) {
-		return this.checkIsActive(msg.sender) && (this.patientPolicy(msg.sender, healthRecordID) ||
-			this.doctorPolicy(msg.sender, healthRecordID) || ADMIN == roles[msg.sender].name);
+		return this.checkIsActive(msg.sender) && 
+			(this.policyOwn(msg.sender, healthRecords[healthRecordID].patient) ||
+			this.policyOwn(msg.sender, healthRecords[healthRecordID].doctor) || 
+			ADMIN == roles[msg.sender].name);
 	}
 
 
