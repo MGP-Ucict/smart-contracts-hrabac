@@ -6,24 +6,31 @@ import {HRABAC} from "./HRABAC.sol";
 
 contract AccessControl is HRABAC, Record {
 
+	//policy with attributes 
 	function policyOwn(address _subjectAttributeValue, address _objectAttributeValue) public pure returns (bool) {
 
 		return _subjectAttributeValue == _objectAttributeValue;
 	}
 
-	function canAccess(uint256 healthRecordID) public view returns (bool) {
-		return this.checkIsActive(msg.sender) && 
+	//get data of a healthRecord
+	function seeHealthRecordData(uint256 healthRecordID) public returns (string memory) {
+		if (this.checkIsActive(msg.sender) && 
 			(this.policyOwn(msg.sender, healthRecords[healthRecordID].patient) ||
 			this.policyOwn(msg.sender, healthRecords[healthRecordID].doctor) || 
-			ADMIN == roles[msg.sender].name);
+			ADMIN == roles[msg.sender].name))
+			{
+				return healthRecords[healthRecordID].data;
+			} 
+			return '';
 	}
 
 
 	modifier onlyDoctor {
-      		require(DOCTOR == roles[msg.sender].name, "The user is not doctor!");
+      		require(this.checkIsActive(msg.sender) && DOCTOR == roles[msg.sender].name, "The user is not doctor!");
        		_;
    	}
 
+   	// create a healthRecord
 	function createHealthRecord(address _patientAddress,  string memory _medicalData,  uint256 _id) 
 	external  onlyDoctor {
 
